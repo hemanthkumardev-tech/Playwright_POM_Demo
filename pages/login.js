@@ -1,4 +1,5 @@
-exports.LoginPage = class LoginPage {
+const {expect}= require('@playwright/test' );
+    exports.LoginPage = class LoginPage {
 
     constructor(page) {
 
@@ -6,6 +7,7 @@ exports.LoginPage = class LoginPage {
         this.username_textbox = page.getByPlaceholder('Username')
         this.password_textbox = page.getByPlaceholder('Password')
         this.login_button = page.getByRole('button', { name: 'Login' })
+        this.error_message = this.page.locator('[data-test="error"]')
     }
 
     async gotoLoginpage() {
@@ -16,4 +18,10 @@ exports.LoginPage = class LoginPage {
         await this.password_textbox.fill(password)
         await this.login_button.click()
     }
-};
+    async verifyLogin(){
+        await expect(this.page).toHaveURL('https://www.saucedemo.com/inventory.html')
+    }
+    async verifyErrorMessage(){
+        await expect(this.error_message).toBeVisible()
+    }
+}

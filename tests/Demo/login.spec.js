@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test } from '@playwright/test';
 import { LoginPage } from '../../pages/login'
 
 test('Login Verification successful', async ({ page }) => {
@@ -7,8 +7,15 @@ test('Login Verification successful', async ({ page }) => {
 
   await Login.gotoLoginpage()
   await Login.login('standard_user', 'secret_sauce')
-  await expect(page).toHaveURL('https://www.saucedemo.com/inventory.html')
- 
+  await Login.verifyLogin();
+
+});
+
+test('verify login with invalid credentials', async ({ page }) => {
+  const Login= new LoginPage(page);
+  await Login.gotoLoginpage()
+  await Login.login('wrong_user name', 'wrong password')
+  await Login.verifyErrorMessage()
   // await page.goto('https://www.saucedemo.com/');
   // await page.getByRole('textbox', { name: 'Username' }).click();
   // await page.getByRole('textbox', { name: 'Username' }).fill('standard_user');
